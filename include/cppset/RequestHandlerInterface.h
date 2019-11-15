@@ -5,15 +5,17 @@
 * https://opensource.org/licenses/GPL-3.0
 **/
 
-#ifndef TEST_INTERFACE3_H
-#define TEST_INTERFACE3_H
+#ifndef REQUEST_HANDLER_INTERFACE_H
+#define REQUEST_HANDLER_INTERFACE_H
 
 #include <iostream>
+#include <vendors/nlohmann/json.hpp>
+using json = nlohmann::json;
 
-class TestInterface3
+class RequestHandlerInterface
 {
     public:
-		virtual void test3() = 0;
+    	virtual json getRequest() = 0;
 };
 
-#endif // TEST_INTERFACE3_H
+#endif // REQUEST_HANDLER_INTERFACE_H

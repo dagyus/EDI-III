@@ -13,29 +13,34 @@
 #include <memory>
 #include <typeinfo>
 #include <cppset/LibraryLoader.h>
+#include <cppset/IniReader.h>
 
 typedef std::shared_ptr<LibraryLoader> LoaderPtr;
+typedef std::shared_ptr<IniReader> IniReaderPtr;
 class ComponentFactory
 {
     public:
         ComponentFactory()
         { 
-            // std::cout << "Se construye ComponentFactory" << std::endl;
             //THE LOADER:
-            _loader = std::make_shared<LibraryLoader>();
+            this->loader = std::make_shared<LibraryLoader>();
+            //INIREADER:
+            IniReaderPtr iniReader( new IniReader() );
+            iniReader->open("configuration.ini");
+            this->componentsPath = iniReader->selectSection("GENERAL")->getValue("componentsPath");
         }
         virtual ~ComponentFactory()
         {
-            // std::cout << "Se destruye ComponentFactory" << std::endl;
-            _loader->freeLibrary();
+            this->loader->freeLibrary();
         }
         
-        template<typename InterfaceType> std::shared_ptr<InterfaceType> create(std::string path)
+        template<typename InterfaceType> std::shared_ptr<InterfaceType> create(std::string componentName)
         {
             typedef std::shared_ptr<InterfaceType> InterfaceTypePtr;
 
             //LOAD:
-            void* load = _loader->loadLibrary(path);
+            // void* load = this->loader->loadLibrary(COMPONENTS_PATH + componentName);
+            void* load = this->loader->loadLibrary(this->componentsPath + componentName);
 
             //NULL COMPONENT OBJECT:
             InterfaceTypePtr componentObject = nullptr;
@@ -43,7 +48,7 @@ class ComponentFactory
             {
                 //CREATE:
                 typedef InterfaceTypePtr ( *Factory ) (std::string);
-                Factory factory = ( Factory ) _loader->getExternalFunction( "create" );
+                Factory factory = ( Factory ) this->loader->getExternalFunction( "create" );
 
                 if(factory)
                 {
@@ -56,28 +61,29 @@ class ComponentFactory
                     }
                     else
                     {
-                        _loader->freeLibrary();
+                        this->loader->freeLibrary();
                         std::cout << "Error: The component doesn't implement the interface: " << typeid(InterfaceType).name() << std::endl;
                         exit(-1);
                     }
                 }
                 else
                 {
-                    _loader->freeLibrary();
+                    this->loader->freeLibrary();
                     std::cout << "Error:  Failed creating a component from "
-                            << path << ", there is no external function \"create(void)\"." << std::endl;
+                            << componentName << ", there is no external function \"create(void)\"." << std::endl;
                     exit(-1);
                 }
             }
             else
             {
-                _loader->freeLibrary();
-                std::cout << "Error: Failed to load the component: " << path << std::endl;
+                this->loader->freeLibrary();
+                std::cout << "Error: Failed to load the component: " << componentName << std::endl;
                 exit(-1);
             }
             return componentObject;
         }
     private:
-         LoaderPtr _loader;
+        LoaderPtr loader;
+        std::string componentsPath;
 };
 #endif // COPONENT_FACTORY_H
