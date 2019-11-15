@@ -13,7 +13,7 @@
 class ApplicationInterface
 {
     public:
-		virtual int run() = 0;
+		virtual void run() = 0;
 };
 
 #endif // APPLICATION_INTERFACE_H

@@ -10,8 +10,7 @@
 #include <fstream>
 
 #include <vendors/nlohmann/json.hpp>
-//#include "../../include/vendors/nlohmann/json.hpp"
-//~ using json = nlohmann::json;json.hpp
+using json = nlohmann::json;
 
 int main()
 {
@@ -59,7 +58,7 @@ int main()
 
     // read a JSON file
     std::ifstream i("./example.json");
-    nlohmann::json j;
+    json j;
     i >> j;
     std::cout << std::setw(4) << j << std::endl;
 

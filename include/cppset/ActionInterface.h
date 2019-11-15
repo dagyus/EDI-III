@@ -13,7 +13,7 @@
 class ActionInterface
 {
     public:
-		virtual int execute() = 0;
+		virtual void execute() = 0;
 };
 
 #endif // ACTION_INTERFACE_H

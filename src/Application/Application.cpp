@@ -8,36 +8,42 @@
 #include <iostream>
 #include <memory>
 #include <cppset/ApplicationInterface.h>
+#include <cppset/ActionInterface.h>
 #include <cppset/ComponentFactory.h>
 #include <cppset/IniReader.h>
+#include <cppset/RequestHandlerInterface.h>
+
 
 typedef std::shared_ptr<ApplicationInterface> IApplicationPtr;
 typedef std::shared_ptr<ActionInterface> IActionPtr;
 typedef std::shared_ptr<ComponentFactory> ComponentFactoryPtr;
 typedef std::shared_ptr<IniReader> IniReaderPtr;
+typedef std::shared_ptr<RequestHandlerInterface> IRequestHandlerPtr;
 
 class Application : public ApplicationInterface
 {
     public:
         Application()
         {
-            // std::cout << "Se construye Application " << std::endl;
+            IniReaderPtr iniReader( new IniReader() );
+            iniReader->open("configuration.ini");
+            this->actionsPath = iniReader->selectSection("GENERAL")->getValue("actionsPath");
         }
-        virtual ~Application()
-        {
-            // std::cout << "Se destruye Application " << std::endl;
-        }
+        
+        virtual ~Application(){}
+
         void run()
         {
-            IniReaderPtr iniReader(new IniReader());
-            iniReader->open("configuration.ini");
-            std::string actionPath = iniReader->selectSection("GENERAL")->getValue("actionPath");
-
             ComponentFactoryPtr cF(new ComponentFactory());
-            IActionPtr action = cF->create<ActionInterface>(actionPath + requestParameters["action"]);
+            //IRequestHandlerPtr rH = cF->create<RequestHandlerInterface>("RequestHandler");
+            //json request = rH->getRequest();
+
+            // IActionPtr action = cF->create<ActionInterface>(this->actionsPath + request["action"]);
+            IActionPtr action = cF->create<ActionInterface>(this->actionsPath + "CreateNote");
             action->execute();
-            // std::cout << "¡Se ejecutó Application()!" << std::endl;
         }
+    private:
+        std::string actionsPath;
 };
 
 extern "C" IApplicationPtr create(std::string);
