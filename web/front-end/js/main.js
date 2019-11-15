@@ -1,3 +1,19 @@
+import { requestApi } from './services/api/todo';
+
+async function showTodos() {
+  const res =  await requestApi({action: "GetTodos" });
+  const data = await res.json();
+
+  const list = document.getElementById("myUL");
+
+  data.forEach(element => {
+    const item = document.createElement("li" );
+    item.innerHTML = element
+    list.appendChild(item);
+  });
+}
+
+
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
 var i;
