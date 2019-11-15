@@ -2,34 +2,34 @@ import { requestApi } from './services/api/todo';
 
 // Ask the server for saved todos
 async function showTodos() {
-  try{
+  try {
     const res = await requestApi({ action: "GetTodos" });
     const data = await res.json();
-  
+
     const list = document.getElementById("myUL");
-  
+
     data.forEach(element => {
       const item = document.createElement("li");
       item.innerHTML = element
       list.appendChild(item);
     });
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
-  
+
 };
 
 
 //Add a todo in the server
 async function showTodos() {
   const message = document.getElementById("feedback");
-
+  const { value } = document.getElementById("myInput");
   try {
-    const res = await requestApi({ action: "AddTodo" });
+    const res = await requestApi({ action: "AddTodo", value });
     const data = await res.json();
     message.innerHTML = "Added todo";
     console.log("Added todo");
-  }catch(error) {
+  } catch (error) {
     console.log(error);
     message.innerHTML = "The todo was not added. Try it again later";
   }
