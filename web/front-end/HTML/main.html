@@ -13,9 +13,8 @@
 <body>
         <div id="myDIV" class="header">
                 <h2>Lista de tareas</h2>
-                <input type="text" id="myInput" placeholder="agrega tu tarea">
-                <span onclick="newElement()" class="addBtn">Agregar</span>
-              </div>
+                <input onkeypress="newElement(event)" type="text" id="myInput" placeholder="agrega tu tarea">
+                <button onclick="newElement(event)" class="addBtn">Agregar</button>   </div>
               
               <ul id="myUL">
                 <li>comprar pan</li>
