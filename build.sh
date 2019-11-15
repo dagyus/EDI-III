@@ -13,8 +13,8 @@ cp ./configuration.ini ./bin/
 g++ -Wall -std=c++11 -I./include/ main.cpp -ldl -o ./bin/main.bin
 
 ##compilo las bibliotecas
-##g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/RequestHandler.cpp -o ./bin/lib/RequestHandler.so
-##g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/ResponseHandler.cpp -o ./bin/lib/ResponseHandler.so
+##g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/RequestHandler/RequestHandler.cpp -o ./bin/lib/RequestHandler.so
+##g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/RequestHandler/ResponseHandler.cpp -o ./bin/lib/ResponseHandler.so
 g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/Application/Application.cpp -o ./bin/lib/Application.so
 g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/Actions/CreateNote/CreateNote.cpp -o ./bin/lib/actions/CreateNote.so
 g++ -shared -Wall -std=c++11 -fPIC -I./include/ ./src/Actions/ReadNotes/ReadNotes.cpp -o ./bin/lib/actions/ReadNotes.so
