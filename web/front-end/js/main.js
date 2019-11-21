@@ -1,22 +1,26 @@
 import { requestApi } from './services/api/todo';
 
-// Ask the server for saved todos
 async function showTodos() {
   try {
-    const res = await requestApi({ action: "GetTodos" });
+    const res = await requestApi({ action: "ReadNotes" });
     const data = await res.json();
 
     const list = document.getElementById("myUL");
 
     data.forEach(element => {
       const item = document.createElement("li");
-      item.innerHTML = element
+      item.innerHTML = `
+        <p>
+          ${element.value}
+        </p> 
+        <button onclick="updateTodo(${element.id})" > editar </button>
+        <button onclick="deleteTodo(${element.id})"> eliminar </button>
+      `
       list.appendChild(item);
     });
   } catch (error) {
     console.log(error);
   }
-
 };
 
 
@@ -25,7 +29,7 @@ async function showTodos() {
   const message = document.getElementById("feedback");
   const { value } = document.getElementById("myInput");
   try {
-    const res = await requestApi({ action: "AddTodo", value });
+    const res = await requestApi({ action: "CreateNote", value });
     const data = await res.json();
     message.innerHTML = "Added todo";
     console.log("Added todo");
@@ -33,9 +37,31 @@ async function showTodos() {
     console.log(error);
     message.innerHTML = "The todo was not added. Try it again later";
   }
-
 };
 
+
+async function updateTodo(id){
+  const message = document.getElementById("feedback");
+  try {
+    const value = prompt("Ingrese el nuevo valor");
+    const res = await requestApi({ action: "UupdateNote", id, value });
+    const data = await res.json();
+    message.innerHTML = "Ypdated todo";
+  } catch (error) {
+    message.innerHTML = "The todo was not added. Try it again later";
+  }
+}
+
+async function deleteTodo(id){
+  const message = document.getElementById("feedback");
+  try {
+    const res = await requestApi({ action: "DeleteNote", id });
+    const data = await res.json();
+    message.innerHTML = "Deleted todo";
+  } catch (error) {
+    message.innerHTML = "The todo was not added. Try it again later";
+  }
+}
 
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
