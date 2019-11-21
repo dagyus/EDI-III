@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { requestApi } from './services/api/todo';
 
 async function showTodos() {
@@ -31,7 +30,6 @@ async function showTodos() {
   const { value } = document.getElementById("myInput");
   try {
     const res = await requestApi({ action: "CreateNote", value });
-    const data = await res.json();
     message.innerHTML = "Added todo";
     console.log("Added todo");
   } catch (error) {
@@ -46,7 +44,6 @@ async function updateTodo(id){
   try {
     const value = prompt("Ingrese el nuevo valor");
     const res = await requestApi({ action: "UupdateNote", id, value });
-    const data = await res.json();
     message.innerHTML = "Ypdated todo";
   } catch (error) {
     message.innerHTML = "The todo was not added. Try it again later";
@@ -57,15 +54,12 @@ async function deleteTodo(id){
   const message = document.getElementById("feedback");
   try {
     const res = await requestApi({ action: "DeleteNote", id });
-    const data = await res.json();
     message.innerHTML = "Deleted todo";
   } catch (error) {
     message.innerHTML = "The todo was not added. Try it again later";
   }
 }
 
-=======
->>>>>>> 1f1db33841b56a72d980ce67f2044f158f12a59b
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
 var i;

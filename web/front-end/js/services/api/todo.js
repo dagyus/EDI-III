@@ -1,11 +1,12 @@
 export const requestApi = data => {
-    return fetch("http://localhost",
+    fetch("http://localhost",
         {
             method: "POST",
             body: data,
             header: {
                 'Content-Type': "application/json"
             }
-        }
-    );
+        })
+        .then(res => res.json())
+        .catch(err => { throw new Error(err) });
 };
